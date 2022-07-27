@@ -49,7 +49,7 @@ class Stock:
         self.market_predictors = ['Close', 'Volume', 'Open', 'High', 'Low']
         self.training_data = self.data.join(self.shifted_data[self.market_predictors]).iloc[1:]
 
-        # print(self.training_data.head(10))
+        print(self.training_data.head(10))
 
         return self.market_predictors, self.training_data
 

@@ -13,7 +13,7 @@ def ticker_prompt(ticker=''):
 # AAPL
 # AMZN
 # GOOG
-ticker_name, stock1 = ticker_prompt('AAPL')
+ticker_name, stock1 = ticker_prompt()
 print(f'Generating results for {ticker_name}')
 # stock1.basic_ticker_info()
 predictors, training_data = stock1.prep_training_data()
