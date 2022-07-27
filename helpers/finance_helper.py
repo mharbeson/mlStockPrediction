@@ -63,10 +63,17 @@ class Learning_Model:
             min_samples_split=2000,
             random_state=1
         )
+
         self.train = self.training_data.iloc[:-100]
         self.test = self.training_data.iloc[-100:]
 
         self.model.fit(self.train[predictors], self.train["Target"])
+
+        # Define backtesting parameters
+        self.start = 1000
+        self.step = 750
+
+        
 
     def check_precision_score(self):
         self.predictors = self.model.predict(self.test[self.predictors])
@@ -77,4 +84,26 @@ class Learning_Model:
         self.precision = round(self.precision * 100, 2)
         return self.precision
 
-    # def backetesting(self, training_data):
+    def backtesting(self):
+        self.predictions = []
+        # Loop
+        for i in range(self.start, self.training_data.shape[0], self.step):
+            # Create training and test sets
+            self.train = self.training_data.iloc[0:i].copy()
+            self.test = self.training_data.iloc[i:i+self.step].copy()
+
+            # Fit model
+            # self.model.fit(self.train[self.predictors], self.train["Target"])  
+
+            self.preds = self.model.predict_proba(self.test[self.predictors])[:, 1]
+            self.preds = pd.Series(self.preds, index=self.test.index)
+            self.preds[self.preds > 0.6] = 1
+            self.preds[self.preds <= 0.6] = 0
+
+            # Combine pred and test
+            # self.combined = pd.concat([self.preds, self.test['Target']], axis=1)
+            self.combined = pd.concat({'Target': self.test['Target'], 'Predictions': self.preds}, axis=1)
+
+            self.predictions.append(self.combined)
+        
+        return pd.concat(self.predictions)  # Concatenate all predictions   
