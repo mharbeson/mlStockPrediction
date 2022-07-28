@@ -17,7 +17,7 @@ ticker_name, stock1 = ticker_prompt('AAPL')
 print(f'Generating results for {ticker_name}')
 # stock1.basic_ticker_info()
 predictors, training_data = stock1.prep_training_data()
-
+print(stock1.generate_indicator_data())
 # print(training_data.head(5))
 
 stock_model1 = Learning_Model(predictors, training_data)
@@ -29,5 +29,6 @@ print(f'Model is directionally accurate {stock_model1.check_precision_score()}% 
 # print(stock_model1.predictors)
 
 #print(stock_model1.check_precision_score())
-print(stock_model1.training_data.head(5))
+# print(stock_model1.training_data.head(5))
 # print(stock_model1.backtesting())
+

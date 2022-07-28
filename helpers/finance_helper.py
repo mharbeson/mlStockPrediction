@@ -4,11 +4,16 @@ import json
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+from finta import TA
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import precision_score
 
 
 class Stock:
+    
+    # Class variables
+    indicators = ['RSI', 'MACD', 'STOCH', 'ADL', 'ATR', 'MOM', 'MFI', 'ROC', 'OBV', 'CCI', 'EMV', 'VORTEX']
+
     def __init__(self, ticker_id='', data_path='data/yahoo_data'):
         self.ticker = ticker_id
         self.path = data_path
@@ -19,14 +24,20 @@ class Stock:
         ''' Return dataframe for ticker and write to file '''
         if os.path.exists(self.ticker_file):
             with open(self.ticker_file) as f:
-                self.hist = pd.read_json(self.ticker_file)
+                self.data = pd.read_json(self.ticker_file)
         else:
             self.ticker = yf.Ticker(self.ticker)
-            self.hist = self.ticker.history(period="max")
+            self.data = self.ticker.history(period="max")
 
-            self.hist.to_json(self.ticker_file)
+            self.data.to_json(self.ticker_file)
         
-        return self.hist
+        return self.data
+
+    def generate_indicator_data(self):
+        for indicator in self.indicators:
+            print(indicator)
+
+
 
     def basic_ticker_info(self):
         ''' Generate head for dataframe and display plot graph of historical rpice '''
