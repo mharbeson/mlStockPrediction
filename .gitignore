@@ -21,6 +21,7 @@ bin/
 develop-eggs/
 dist/
 downloads/
+etc/
 eggs/
 .eggs/
 include/
