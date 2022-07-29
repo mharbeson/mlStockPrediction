@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+import plotly.graph_objects as go
 from finta import TA
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import precision_score
@@ -18,8 +19,6 @@ class Stock:
     smoothing = 2
 
     # Random Forest Classifier Parameters
-    # n_estimators=300
-    # min_samples_split=200
     n_estimators=300
     min_samples_split=200
 
@@ -63,6 +62,18 @@ class Stock:
         
         return self.data
 
+    def basic_ticker_info(self):
+        ''' Generate head for dataframe and display plot graph of historical rpice '''
+        self.pd = self.retrieve_stock_data()
+
+        print(self.pd.head(5))
+        self.pd = self.pd['Close']
+        sns.lineplot(data=self.pd, linewidth=2.5, palette='tab10')
+        plt.title('Closing Price Trend for ' + self.ticker)
+        plt.xlabel('Year')
+        plt.ylabel('Price in USD')
+        plt.show()
+
     def retrieve_indicator_data(self, data):
         for indicator in self.indicators:
             self.indicator_data = eval('TA.' + indicator + '(self.data)')
@@ -87,14 +98,6 @@ class Stock:
         self.data['low_close_ratio'] = self.data['low'] / self.data['close']
 
         return self.data
-
-    def basic_ticker_info(self):
-        ''' Generate head for dataframe and display plot graph of historical rpice '''
-        self.pd = self.retrieve_stock_data()
-
-        print(self.pd.head(5))
-        self.pd.plot.line(y="Close", use_index=True)
-        plt.show()
 
     def prep_training_data(self):
 
@@ -169,6 +172,13 @@ class Stock:
         # DF of True Target and Predicted Target
         print(self.combined.tail(10))
 
+        plt.figure(figsize=(20, 10))
+        sns.lineplot(data=self.combined, linewidth=2.5, palette='tab10')
+        plt.title('Initial Model - Precision of ' + str(self.precision) + '%')
+        plt.xlabel('Target vs Prediction')
+        plt.ylabel('Date')
+        plt.show()
+
         return self.precision
 
     def backtesting(self):
@@ -193,14 +203,27 @@ class Stock:
             combined = pd.concat({'target': test['target'], 'prediction': m_ind}, axis=1)
 
             predictions.append(combined)
-        predictions = pd.concat(predictions)
-        predictions.to_csv(self.prediction_file)
+        self.predictions = pd.concat(predictions)
+        self.predictions.to_csv(self.prediction_file)
         
         # Calculate new precision score
-        ps = precision_score(predictions['target'], predictions['prediction'])
-        ps = round(ps * 100, 2)
+        self.ps = precision_score(self.predictions['target'], self.predictions['prediction'])
+        self.ps = round(self.ps * 100, 2)
 
-        return predictions, ps
+        return self.predictions, self.ps
+
+    def backtesting_lineplot(self):
+        self.df = pd.read_csv(self.prediction_file, index_col=0)
+        self.df = self.df.iloc[-50:]
+
+        print(self.df)
+        plt.figure(figsize=(20, 10))
+        sns.lineplot(data=self.df, linewidth=2.5, palette='tab10')
+        plt.title('Backtesting Model - Precision of ' + str(self.ps) + '%')
+        plt.xlabel('Target vs Prediction')
+        plt.ylabel('Date')
+        plt.xticks(rotation = 'vertical')
+        plt.show()
 
     def pred_heatmap(self):
         ''' Heatmap of predictions '''
@@ -209,7 +232,29 @@ class Stock:
 
         plt.figure(figsize=(10,10))
         sns.heatmap(self.cm, annot=True, fmt='d', cmap='Blues')
+        plt.title('Confusion Matrix for ' + self.ticker + ' Backtesting Precision Score ' + str(self.ps) + '%')
         plt.xlabel('Predicted')
         plt.ylabel('Target')
         plt.show()
-        return self.prediction
+        return self.prediction, self.cm
+
+    def candlestick_plot(self):
+        ''' Candlestick Plot '''
+        self.training_data = pd.read_csv(self.training_data_file, index_col=0)
+
+        # Create Candlestick Plot
+        fig = go.Figure(data=[go.Candlestick(x=self.training_data.index,
+                                                open=self.training_data['open'],
+                                                high=self.training_data['high'],
+                                                low=self.training_data['low'],
+                                                close=self.training_data['actualclose'])])
+        
+        fig.update_layout(
+            title='Candlestick Plot for ' + self.ticker,
+            yaxis_title='Price (USD)',
+            shapes = [dict(
+                x0=self.training_data.index[0], x1=self.training_data.index[-1], y0=self.training_data['actualclose'].mean(), y1=self.training_data['actualclose'].mean())],
+        )
+        
+        fig.show()
+        

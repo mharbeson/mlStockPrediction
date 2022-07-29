@@ -25,6 +25,8 @@ def main():
     stock1.basic_ticker_info()
     print(training_data.tail(10))
     line_break()
+    # stock1.candlestick_plot()
+    # line_break()
 
     print('Check for class inbalance')
     print('This is important to ensure the truth value is not skewed in one direction')
@@ -44,6 +46,9 @@ def main():
     line_break()
     print('Backtesting Predictions:\n')
     print(predictions)
+    line_break()
+    print('Last 100 days of predictions after backtesting:\n')
+    stock1.backtesting_lineplot()
     line_break()
 
     print('Plotting Target vs Prediction')
