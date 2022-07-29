@@ -4,6 +4,7 @@ examples/
 # Project Specific
 .cache*
 
+etc/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

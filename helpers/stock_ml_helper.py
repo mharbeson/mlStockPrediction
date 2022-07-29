@@ -19,7 +19,7 @@ class Stock:
     smoothing = 2
 
     # Random Forest Classifier Parameters
-    n_estimators=300
+    n_estimators=1000
     min_samples_split=200
 
     # Define Backetesting Parameters
