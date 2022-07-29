@@ -9,6 +9,7 @@
 
 - The objective of this project was to allow a user to select any stock ticker and build a machine learning model. 
 - Data is pulled from the yfinance and finta API libraries in Python and utilizes the RandomForestClassifier algorithm. 
+    - Info on FinTA [here](https://github.com/peerchemist/finta)
 - This model is designed to maximize true positive value results or when the algorithm predicts the price will go up. This results in a large number of false negatives, however in the case of the stock market this would be minimizing potential losses rather than maximizing gains. 
 - The model can further be improved through tweaking market indicators, reduced step size, a different machine learning algorithm. 
 

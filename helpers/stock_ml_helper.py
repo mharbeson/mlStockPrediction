@@ -24,10 +24,11 @@ class Stock:
 
     # Define Backetesting Parameters
     # Smaller steps will take longer to run but may yield better accuracy
-    start = 1000
+    # start = 1000
+    start = 500
     # step = 750
-    step = 200
-    # step = 50
+    # step = 200
+    step = 50
 
     # Adjust the below value to determine the threshold for backtesting. Setting > 0.6 will throw out more potential correct trades
     backtest_threshold = 0.6
