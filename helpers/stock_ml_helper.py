@@ -19,14 +19,14 @@ class Stock:
     # Random Forest Classifier Parameters
     # n_estimators=300
     # min_samples_split=200
-    n_estimators=100
+    n_estimators=300
     min_samples_split=200
 
     # Define Backetesting Parameters
     # Smaller steps will take longer to run but may yield better accuracy
     start = 1000
-    step = 1000
     # step = 750
+    step = 200
     # step = 50
 
     # Adjust the below value to determine the threshold for backtesting. Setting > 0.6 will throw out more potential correct trades
