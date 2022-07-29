@@ -37,7 +37,7 @@
 
 - Python 3.8.10
 - Stuff
-- Linux users will require python3-tk and python3-gi-cairo. These can be installed by:
+- Linux users may require python3-tk and python3-gi-cairo. These can be installed by:
 ```
 apt-get install python3-tk python3-gi-cairo
 ```
@@ -133,17 +133,17 @@ python main.py
 
 ## Project Requirements
 
-- Category 1: Python Programming Basics:
-    - Create a dictionary or list, populate it with several values, retrieve at least one value, and use it in your program.
-        - See function trackFeaturesGenerator()
-    - Create and call at least 3 functions or methods, at least one of which must return a value that is used somewhere else in your code. To clarify, at least one function should be called in your code, that function should calculate, retrieve, or otherwise set the value of a variable or data structure, return a value to where it was called, and use that value somewhere else in your code.
-        - See main.py
+- Category 1: Loading Data:
+    - Read two data sets in with an API. 
+    - This was accomplished through the use of the yfinance and finta API in Python.
+        - See helper/stock_ml_helper.py
 
-- Category 2: Utilize External Data:
-    - Connect to an external/3rd party API and read data into your app
-        - See main.py
+- Category 2: Clean and operate on data:
+    - Clean your data and perform a pandas merge with your two data sets, then calculate some new values based on the new data set.  
+    - This was accomplished through the prep_training_data() and retrieve_indicator_data() methods, joining the yfinance and finta dataframes and generating new columns such as EMA(Exponential Moving Average).
+        - See helper/stock_ml_helper.py
 
-- Category 3: Data Display
+- Category 3: Visualize / Present
     - Visualize data in a graph, chart, or other visual representation of data.
         - See function trackFeatureHeatmap()
     - Display data in tabular form
@@ -154,5 +154,5 @@ python main.py
         - See readme for requirements.txt
 
 - Future Stretch Items
-    - Impliment paper trading to allow the algorithim to learn from it's decisions.
-    - 
+    - Impliment paper trading to allow the algorithim to learn from its decisions.
+    - Tailor market indicators to yield highest possible precision score.

@@ -22,10 +22,12 @@ def main():
     line_break()
 
     market_indicators, training_data = stock1.prep_training_data()
+    stock1.basic_ticker_info()
     print(training_data.tail(10))
     line_break()
 
     print('Check for class inbalance')
+    print('This is important to ensure the truth value is not skewed in one direction')
     print(training_data['target'].value_counts())
     line_break()
 
@@ -33,7 +35,7 @@ def main():
 
     score1 = stock1.check_precision_score()
     line_break()
-    print(f'Initial Precision score: {score1}')
+    print(f'Initial Precision score before backtesting: {score1}')
     line_break()
 
     predictions, score2 = stock1.backtesting()
@@ -43,6 +45,10 @@ def main():
     print('Backtesting Predictions:\n')
     print(predictions)
     line_break()
+
+    print('Plotting Target vs Prediction')
+    print('1:1 line is the ideal prediction')
+    stock1.pred_heatmap()
 
 
 if __name__ == "__main__":

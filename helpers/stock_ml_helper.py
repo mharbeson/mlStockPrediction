@@ -3,10 +3,11 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 from finta import TA
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import precision_score
-from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix
 
 
 class Stock:
@@ -93,7 +94,7 @@ class Stock:
 
         print(self.pd.head(5))
         self.pd.plot.line(y="Close", use_index=True)
-        # plt.show()
+        plt.show()
 
     def prep_training_data(self):
 
@@ -200,3 +201,15 @@ class Stock:
         ps = round(ps * 100, 2)
 
         return predictions, ps
+
+    def pred_heatmap(self):
+        ''' Heatmap of predictions '''
+        self.prediction = pd.read_csv(self.prediction_file, index_col=0)
+        self.cm = confusion_matrix(self.prediction['target'], self.prediction['prediction'])
+
+        plt.figure(figsize=(10,10))
+        sns.heatmap(self.cm, annot=True, fmt='d', cmap='Blues')
+        plt.xlabel('Predicted')
+        plt.ylabel('Target')
+        plt.show()
+        return self.prediction
